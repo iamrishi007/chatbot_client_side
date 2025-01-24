@@ -20,9 +20,9 @@ function Dashboard() {
     setLoading(true);
 
     try {
-      // const apiKey = process.env.REACT_APP_GEMINI_API_KEY;
+     
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-      console.log(apiKey);
+   
       
       const response = await axios.post(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
