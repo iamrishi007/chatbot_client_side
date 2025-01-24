@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import axios from "axios";
 import { Box, Button, Input, Text, Flex, Spinner, Heading, IconButton, Image } from "@chakra-ui/react";
 import { CopyIcon } from "@chakra-ui/icons";
@@ -19,7 +20,10 @@ function Dashboard() {
     setLoading(true);
 
     try {
-      const apiKey = process.env.REACT_APP_GEMINI_API_KEY; // Access the API key from environment variables
+      // const apiKey = process.env.REACT_APP_GEMINI_API_KEY;
+      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+      console.log(apiKey);
+      
       const response = await axios.post(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
         {
