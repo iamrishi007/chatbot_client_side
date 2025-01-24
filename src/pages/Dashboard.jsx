@@ -19,8 +19,9 @@ function Dashboard() {
     setLoading(true);
 
     try {
+      const apiKey = process.env.REACT_APP_GEMINI_API_KEY; // Access the API key from environment variables
       const response = await axios.post(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyA7fmuZgHgLW4JklVJ0Hdak8yDnaInSAz4",
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
         {
           contents: [
             {
@@ -53,14 +54,12 @@ function Dashboard() {
 
   return (
     <>
-
       <Box
         position="relative"
         h="100vh"
         w="100vw"
         bgGradient="linear(to-b, rgba(0,0,0,0.6), rgba(0,0,0,0.9))"
         overflow="hidden"
-
       >
         <Image
           src="https://i.pinimg.com/originals/2e/00/05/2e0005b76c7fb072b477a2e4b2678be5.gif"
@@ -91,8 +90,6 @@ function Dashboard() {
             fontSize={{ base: "2xl", md: "3xl" }}
             fontWeight="extrabold"
             lineHeight="short"
-            // textShadow="0px 4px 6px rgba(36, 34, 34, 0.8)"
-
             letterSpacing="wide"
             bgGradient="linear(to-r, teal.300, blue.500)"
             bgClip="text"
@@ -165,6 +162,7 @@ function Dashboard() {
             </Box>
           )}
         </Box>
+
         <Flex justifyContent="flex-end" p={4}>
           <Button
             bgGradient="linear(to-r, #ff7e5f, #feb47b)"
@@ -183,7 +181,9 @@ function Dashboard() {
             transition="all 0.3s ease"
             textAlign="left"
             onClick={handleLogout}
-          >Logout</Button>
+          >
+            Logout
+          </Button>
         </Flex>
       </Box>
     </>
