@@ -3,7 +3,7 @@ import { Box, FormControl, FormLabel, Input, Button, useToast, Text } from '@cha
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
-function SignUp() {
+function Signup() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -143,4 +143,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default Signup;

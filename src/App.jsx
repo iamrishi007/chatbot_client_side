@@ -1,8 +1,8 @@
 import { Route, Routes, Navigate } from "react-router-dom"
 import Home from "./pages/Home"
 import Dashboard from "./pages/Dashboard"
-import SignUp from "./pages/Signup"
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 const isAuthenticated = () => {
   const token = localStorage.getItem("authToken");
@@ -20,7 +20,7 @@ function App() {
       <div>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
 
           <Route
