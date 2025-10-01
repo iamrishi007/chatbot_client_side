@@ -1,7 +1,16 @@
 import { useState } from "react";
-
 import axios from "axios";
-import { Box, Button, Input, Text, Flex, Spinner, Heading, IconButton, Image } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Input,
+  Text,
+  Flex,
+  Spinner,
+  Heading,
+  IconButton,
+  Image,
+} from "@chakra-ui/react";
 import { CopyIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 
@@ -16,16 +25,26 @@ function Dashboard() {
       alert("Please enter a question!");
       return;
     }
-
     setLoading(true);
 
     try {
-     
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-   
-      
+      if (!apiKey) {
+        throw new Error("No API key provided");
+      }
+
+      // Step 1: fetch available models
+      const modelsResp = await axios.get(
+        `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`
+      );
+      console.log("Available models:", modelsResp.data);
+
+      // Pick a valid model from console output
+      const chosenModel = "gemini-2.5-flash"; // replace with one from your models list
+
+      // Step 2: call generateContent
       const response = await axios.post(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/${chosenModel}:generateContent?key=${apiKey}`,
         {
           contents: [
             {
@@ -36,11 +55,12 @@ function Dashboard() {
       );
 
       const generatedAnswer =
-        response.data?.candidates?.[0]?.content?.parts?.[0]?.text || "No answer generated.";
+        response.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+        "No answer generated.";
       setAnswer(generatedAnswer);
-    } catch (error) {
-      console.error("Error while fetching the answer:", error);
-      setAnswer("Failed to fetch the answer. Please try again later.");
+    } catch (err) {
+      console.error("Error while fetching the answer:", err.response?.data || err.message);
+      setAnswer("Failed to fetch the answer. Please check console for details.");
     } finally {
       setLoading(false);
     }
@@ -49,6 +69,11 @@ function Dashboard() {
   const copyAnswer = () => {
     navigator.clipboard.writeText(answer);
     alert("Answer copied to clipboard!");
+  };
+
+  const handleClearChat = () => {
+    setQuestion("");
+    setAnswer("");
   };
 
   const handleLogout = () => {
@@ -115,6 +140,7 @@ function Dashboard() {
             borderRadius={"18px"}
           />
 
+          {/* Generate Answer Button */}
           <Button
             bgGradient="linear(to-r, #ff7e5f, #feb47b)"
             color="white"
@@ -136,6 +162,30 @@ function Dashboard() {
           >
             {loading ? <Spinner size="sm" /> : "Generate Answer"}
           </Button>
+
+          {/* Clear Chat Button (only show if something exists) */}
+          {(answer || question) && (
+            <Button
+              bgGradient="linear(to-r, #00c6ff, #0072ff)"
+              color="white"
+              _hover={{
+                bgGradient: "linear(to-r, #0072ff, #00c6ff)",
+                transform: "scale(1.05)",
+              }}
+              size="lg"
+              px={8}
+              py={6}
+              fontSize="lg"
+              fontWeight="bold"
+              borderRadius="full"
+              boxShadow="md"
+              transition="all 0.3s ease"
+              onClick={handleClearChat}
+              m={"15px"}
+            >
+              Clear Chat
+            </Button>
+          )}
 
           {answer && (
             <Box
